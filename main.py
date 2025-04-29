@@ -20,4 +20,6 @@ async def test(ctx, arg):
 async def on_ready():
     print(f"Locked in {bot.user}")
 
+bot.load_extension("funcionalidades_tecnicas")
+
 bot.run(config.TOKEN)
