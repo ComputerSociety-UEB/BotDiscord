@@ -1,8 +1,7 @@
 import discord
 from discord.ext import commands
-import config  # archivo token config.py
+import config  # archivo con config.TOKEN
 
-# Nuevas importaciones
 from funcionalidadesbasicas import setup
 from funcionalidadesextras import FuncionalidadesExtras
 
@@ -11,34 +10,44 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix='-', intents=intents)
 
-# Prueba de Argumento
-@bot.command()
-async def test(ctx, arg):
-    await ctx.send(arg)
-
-# Prueba de runeo exitoso
+# Evento de encendido
 @bot.event
 async def on_ready():
     print(f"Locked in {bot.user}")
 
-# Registrar los comandos de funcionalidadesbasicas.py
-setup(bot)
+# Evento para detectar la palabra "profe"
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
 
-# Comando para enviar frases motivacionales
+    await FuncionalidadesExtras.detectar_profe(message)
+    await bot.process_commands(message)
+
+# Comando de prueba
+@bot.command()
+async def test(ctx, arg):
+    await ctx.send(arg)
+
+# Comando motivacional
 @bot.command(name="motivacion")
 async def motivacion(ctx):
     await FuncionalidadesExtras.enviar_frase_motivacional(ctx)
 
-# MUY IMPORTANTE: on_message personalizado
-@bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
+# Comando para generar meme de Megamind
+@bot.command(name="megamind")
+async def megamind(ctx, *, texto: str):
+    """Genera un meme con la plantilla de Megamind."""
+    await FuncionalidadesExtras.generar_meme_megamind(ctx, texto)
 
-    # Primero detectar si dicen "profe"
-    await FuncionalidadesExtras.detectar_profe(message)
+# Comando para generar meme triste (Kermit)
+@bot.command(name="sad")
+async def sad(ctx, *, texto: str):
+    """Genera un meme triste con Kermit."""
+    await FuncionalidadesExtras.generar_meme_sad(ctx, texto)
 
-    # Después procesar comandos como -motivacion, -test, etc.
-    await bot.process_commands(message)
+# Comandos básicos
+setup(bot)
 
+# Ejecutar bot
 bot.run(config.TOKEN)
