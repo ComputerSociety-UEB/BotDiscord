@@ -5,46 +5,6 @@ import asyncio
 BAD_WORDS = ["cagada", "mierda", "puta", ":v"]
 
 def setup(bot):
-    import discord
-from discord.ext import commands
-
-class RoleSelectView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=None)
-
-    @discord.ui.button(label="Rol de Prueba 1", style=discord.ButtonStyle.primary)
-    async def prueba1_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await self.assign_role(interaction, "rol de prueba 1")
-
-    @discord.ui.button(label="Rol de Prueba 2", style=discord.ButtonStyle.primary)
-    async def prueba2_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await self.assign_role(interaction, "rol de prueba 2")
-
-    @discord.ui.button(label="Rol de Prueba 3", style=discord.ButtonStyle.primary)
-    async def prueba3_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await self.assign_role(interaction, "rol de prueba 3")
-
-    @discord.ui.button(label="Admin", style=discord.ButtonStyle.danger)
-    async def admin_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await self.assign_role(interaction, "admin")
-
-    async def assign_role(self, interaction: discord.Interaction, role_name: str):
-        role = discord.utils.get(interaction.guild.roles, name=role_name)
-        if role:
-            await interaction.user.add_roles(role)
-            await interaction.response.send_message(f"✅ {interaction.user.mention}, has seleccionado **{role_name}**.", ephemeral=True)
-        else:
-            await interaction.response.send_message(f"⚠️ El rol **{role_name}** no existe. Contacta a un administrador.", ephemeral=True)
-
-@bot.event
-async def on_member_join(member):
-    canal_bienvenida = discord.utils.get(member.guild.text_channels, name="general")
-    if canal_bienvenida:
-        mensaje_bienvenida = f"👋 Bienvenido a **Computer Society**, {member.mention}. Espero que aprendas mucho y tengas un excelente trabajo."
-        embed = discord.Embed(title="Selecciona tu rol", description="Presiona uno de los botones para elegir tu rol.", color=discord.Color.blue())
-
-        await canal_bienvenida.send(mensaje_bienvenida)
-        await canal_bienvenida.send(embed=embed, view=RoleSelectView())
 
     @bot.event
     async def on_message(message):
@@ -156,7 +116,4 @@ async def on_member_join(member):
             await ctx.guild.unban(user.user)
             await ctx.send(f"✅ {user.user.mention} ha sido desbaneado.")
         except Exception as e:
-            await ctx.send(f"❌ Error al desbanear: {e}")
-
-
-
+            await ctx.send(f"❌ Error al desbanear: {e}")zz
